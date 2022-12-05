@@ -1,0 +1,29 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Template for the ntier vpc",
+    "Parameters": {
+        "vpccidr": {
+            "Description": "this is for the vpc Cidr block ",
+            "Type": "String",
+            "Default": "192.168.0.0/16"
+        }
+    },
+    "Resources": {
+        "ntiervpc": {
+            "Description": "this is a vpc for ntier",
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": {
+                    "Ref": "vpccidr"
+                },
+                "EnableDnsHostnames": true,
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "ntier"
+                    }
+                ]
+            }
+        }
+    }
+}
