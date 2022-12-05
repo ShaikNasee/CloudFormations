@@ -6,8 +6,14 @@
             "Description": "this is for the vpc Cidr block ",
             "Type": "String",
             "Default": "192.168.0.0/16"
+        },
+        "subnetcidrs": {
+            "Description": "-",
+            "Type": "List<String>",
+            "Default": "192.168.0.0/24,192.168.1.0/24,192.168.2.0/24,192.168.3.0/24"
         }
     },
+    
     "Resources": {
         "ntiervpc": {
             "Description": "this is a vpc for ntier",
@@ -21,6 +27,98 @@
                     {
                         "Key": "Name",
                         "Value": "ntier"
+                    }
+                ]
+            }
+        },
+        "web1": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": "ap-south-1a",
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Fn::Select": [
+                        0,
+                        {
+                            "Ref": "subnetcidrs"
+                        }
+                    ]
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "web1"
+                    }
+                ]
+            }
+        },
+        "web2": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": "ap-south-1b",
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Fn::Select": [
+                        1,
+                        {
+                            "Ref": "subnetcidrs"
+                        }
+                    ]
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "web2"
+                    }
+                ]
+            }
+        },
+        "db1": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": "ap-south-1c",
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Fn::Select": [
+                        2,
+                        {
+                            "Ref": "subnetcidrs"
+                        }
+                    ]
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "db1"
+                    }
+                ]
+            }
+        },
+        "db2": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": "ap-south-1a",
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "CidrBlock": {
+                    "Fn::Select": [
+                        3,
+                        {
+                            "Ref": "subnetcidrs"
+                        }
+                    ]
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "db2"
                     }
                 ]
             }
