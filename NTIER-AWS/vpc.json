@@ -347,7 +347,7 @@
                 "MasterUsername": "admin",
                 "MasterUserPassword": "adminadmin",
                 "MultiAZ": "false",
-                "PubliclyAccessible": "false" ,
+                "PubliclyAccessible": "false",
                 "Tags": [
                     {
                         "Key": "Name",
@@ -357,6 +357,36 @@
                 "VPCSecurityGroups": [
                     {
                         "Ref": "mysqldbsg"
+                    }
+                ]
+            }
+        },
+        "webinstance": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "KeyName": "forcf",
+                "ImageId": "ami-07ffb2f4d65357b42",
+                "InstanceType": "t2.micro",
+                "Monitoring": "false",
+                "NetworkInterfaces": [
+                    {
+                        "AssociatePublicIpAddress": true,
+                        "DeleteOnTermination": true,
+                        "DeviceIndex": 0,
+                        "GroupSet": [
+                            {
+                                "Ref": "ntiersg"
+                            }
+                        ],
+                        "SubnetId": {
+                            "Ref": "web1"
+                        }
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "web1"
                     }
                 ]
             }
