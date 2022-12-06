@@ -167,6 +167,168 @@
                     "Ref": "ntierigw"
                 }
             }
+        },
+        "PublicRT": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "PublicRT"
+                    }
+                ]
+            }
+        },
+        "web1rtassociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "web1"
+                },
+                "RouteTableId": {
+                    "Ref": "PublicRT"
+                }
+            }
+        },
+        "web2rtassociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "web2"
+                },
+                "RouteTableId": {
+                    "Ref": "PublicRT"
+                }
+            }
+        },
+        "RtIgw": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRT"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "GatewayId": {
+                    "Ref": "ntierigw"
+                }
+            }
+        },
+        "Privatert": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "Privatert"
+                    }
+                ]
+            }
+        },
+        "db1rtassociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "db1"
+                },
+                "RouteTableId": {
+                    "Ref": "Privatert"
+                }
+            }
+        },
+        "db2rtassociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "db2"
+                },
+                "RouteTableId": {
+                    "Ref": "Privatert"
+                }
+            }
+        },
+        "ntiersg": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": " this is a security groupd for ntier ",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "80",
+                        "ToPort": "80",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "CidrIp": "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "443",
+                        "ToPort": "443",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "openssh"
+                    }
+                ]
+            }
+        },
+        "mysqldbsg": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "security group for mysql database",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "3306",
+                        "ToPort": "3306",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "ntiervpc"
+                },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "mysqlsg"
+                    }
+                ]
+            }
+        },
+        "mysqldbsubnetgroup": {
+            "Type": "AWS::RDS::DBSubnetGroup",
+            "Properties": {
+                "DBSubnetGroupDescription": "this is a mysqldbsubnetgroup ",
+                "SubnetIds": [
+                    {
+                        "Ref": "db1"
+                    },
+                    {
+                        "Ref": "db2"
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "dbsubnetgroup"
+                    }
+                ]
+            }
         }
     }
 }
