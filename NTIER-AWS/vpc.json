@@ -464,5 +464,33 @@
                 ]
             }
         }
+    },
+    "Outputs": {
+        "vpcid": {
+            "Value": {
+                "Ref": "ntiervpc"
+            }
+        },
+        "webinstanceid": {
+            "Value": {
+                "Ref": "webinstance"
+            }
+        },
+        "webpublicip": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "webinstance",
+                    "PublicIp"
+                ]
+            }
+        },
+        "dbendpoint": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "mysqlinstance",
+                    "Endpoint.Address"
+                ]
+            }
+        }
     }
 }
