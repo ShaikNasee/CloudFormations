@@ -27,6 +27,59 @@
         "db2Az": {
             "Description": "this is the availability of db2",
             "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "dbSize": {
+            "Description": "Allocated storage for the database",
+            "Type": "String",
+            "Default": "20"
+        },
+        "dbsizetype": {
+            "Description": "this is db instance class",
+            "Type": "String",
+            "Default": "db.t2.micro"
+        },
+        "BackupRetentionperion": {
+            "Description": "for backup of the database ",
+            "Type": "Number",
+            "Default": 0
+        },
+        "DBservername": {
+            "Description": "Name of the database ",
+            "Type": "String",
+            "Default": "ecomercedb"
+        },
+        "DBname": {
+            "Description": "name of the database",
+            "Type": "String",
+            "Default": "mysqldbinstance"
+        },
+        "Masterusername": {
+            "Description": "User name of the database",
+            "Type": "String",
+            "Default": "admin"
+        },
+        "Mastepassword": {
+            "Description": "password of the master user ",
+            "Type": "String",
+            "Default": "adminadmin"
+        },
+        "MultiAz": {
+            "Description": "if multAZ required for database ",
+            "Type": "String",
+            "Default": "false",
+            "AllowedValues": [
+                "true",
+                "false"
+            ]
+        },
+        "keypairs": {
+            "Description": "keypairs for the webinstance",
+            "Type": "AWS::EC2::KeyPair::KeyName"
+        },
+        "webinstancetype": {
+            "Description": "type of the webinstance ",
+            "Type": "String",
+            "Default": "t2.micro"
         }
     },
     "Resources": {
@@ -333,20 +386,36 @@
         "mysqlinstance": {
             "Type": "AWS::RDS::DBInstance",
             "Properties": {
-                "AllocatedStorage": "20",
-                "DBInstanceClass": "db.t2.micro",
+                "AllocatedStorage": {
+                    "Ref": "dbSize"
+                },
+                "DBInstanceClass": {
+                    "Ref": "dbsizetype"
+                },
                 "AllowMajorVersionUpgrade": "false",
                 "AutoMinorVersionUpgrade": "false",
-                "BackupRetentionPeriod": "0",
-                "DBInstanceIdentifier": "ecomercedb",
-                "DBName": "mysqldbinstance",
+                "BackupRetentionPeriod": {
+                    "Ref": "BackupRetentionperion"
+                },
+                "DBInstanceIdentifier": {
+                    "Ref": "DBservername"
+                },
+                "DBName": {
+                    "Ref": "DBname"
+                },
                 "DBSubnetGroupName": {
                     "Ref": "mysqldbsubnetgroup"
                 },
                 "Engine": "mysql",
-                "MasterUsername": "admin",
-                "MasterUserPassword": "adminadmin",
-                "MultiAZ": "false",
+                "MasterUsername": {
+                    "Ref": "Masterusername"
+                },
+                "MasterUserPassword": {
+                    "Ref": "Mastepassword"
+                },
+                "MultiAZ": {
+                    "Ref": "MultiAz"
+                },
                 "PubliclyAccessible": "false",
                 "Tags": [
                     {
@@ -364,9 +433,13 @@
         "webinstance": {
             "Type": "AWS::EC2::Instance",
             "Properties": {
-                "KeyName": "forcf",
+                "KeyName": {
+                    "Ref": "keypairs"
+                },
                 "ImageId": "ami-07ffb2f4d65357b42",
-                "InstanceType": "t2.micro",
+                "InstanceType": {
+                    "Ref": "webinstancetype"
+                },
                 "Monitoring": "false",
                 "NetworkInterfaces": [
                     {
